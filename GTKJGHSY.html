@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国土空间规划术语学习</title>
+    <style>
+        :root {
+            --primary-color: #1a5276;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "SimHei", sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .search-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        #search-input {
+            width: 70%;
+            max-width: 600px;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        #search-input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 8px rgba(41, 128, 185, 0.3);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        
+        .terms-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .term-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .term-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .term-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--light-color);
+            padding-bottom: 8px;
+        }
+        
+        .term-card p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .term-card .note {
+            font-size: 0.9rem;
+            color: #777;
+            font-style: italic;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 3px solid var(--secondary-color);
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .term-card .source {
+            font-size: 0.8rem;
+            color: #999;
+            text-align: right;
+        }
+        
+        .term-card .category-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .modal-term {
+            margin-bottom: 20px;
+        }
+        
+        .modal-term h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+        }
+        
+        .modal-term p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+        
+        .modal-term .note {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .modal-term .source {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 10px;
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quiz-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .quiz-question h3 {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            padding: 10px 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quiz-option:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .quiz-option.selected {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        
+        .quiz-option.correct {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+        
+        .quiz-option.incorrect {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+        
+        .quiz-result {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+        
+        .submit-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 25px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 50px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .terms-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .term-card {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .term-card:nth-child(1) { animation-delay: 0.1s; }
+        .term-card:nth-child(2) { animation-delay: 0.2s; }
+        .term-card:nth-child(3) { animation-delay: 0.3s; }
+        .term-card:nth-child(4) { animation-delay: 0.4s; }
+        .term-card:nth-child(5) { animation-delay: 0.5s; }
+        .term-card:nth-child(6) { animation-delay: 0.6s; }
+        .term-card:nth-child(7) { animation-delay: 0.7s; }
+        .term-card:nth-child(8) { animation-delay: 0.8s; }
+        .term-card:nth-child(9) { animation-delay: 0.9s; }
+        .term-card:nth-child(10) { animation-delay: 1.0s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>国土空间规划术语学习</h1>
+            <p class="subtitle">掌握国土空间规划专业术语，提升规划实践能力</p>
+        </header>
+        
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="搜索术语...">
+        </div>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-category="all">全部</button>
+            <button class="filter-btn" data-category="basic">基础术语</button>
+            <button class="filter-btn" data-category="system">基本制度</button>
+            <button class="filter-btn" data-category="master">总体规划</button>
+            <button class="filter-btn" data-category="detail">详细规划</button>
+            <button class="filter-btn" data-category="special">专项规划</button>
+            <button class="filter-btn" data-category="implement">实施管理</button>
+            <button class="filter-btn" data-category="supervision">实施监督</button>
+        </div>
+        
+        <div class="terms-container" id="terms-container">
+            <!-- 术语卡片将通过JavaScript动态生成 -->
+        </div>
+        
+        <div class="quiz-container">
+            <h2>术语小测验</h2>
+            <div class="quiz-question">
+                <h3>1. 什么是"国土空间"？</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option">A. 国家主权与主权权利管辖下的地域空间</div>
+                    <div class="quiz-option">B. 城市和乡村的统称</div>
+                    <div class="quiz-option">C. 所有可用于建设的土地</div>
+                    <div class="quiz-option">D. 国家公园和自然保护区的总称</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <h3>2. "永久基本农田"的主要作用是什么？</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option">A. 保障城市扩张用地</div>
+                    <div class="quiz-option">B. 保障国家粮食安全和重要农产品供给</div>
+                    <div class="quiz-option">C. 作为城市绿化带使用</div>
+                    <div class="quiz-option">D. 用于工业发展</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <h3>3. 下列哪项不属于国土空间规划"三区三线"中的内容？</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option">A. 永久基本农田</div>
+                    <div class="quiz-option">B. 生态保护红线</div>
+                    <div class="quiz-option">C. 城镇开发边界</div>
+                    <div class="quiz-option">D. 城市轨道交通线</div>
+                </div>
+            </div>
+            
+            <button class="submit-btn" id="submit-quiz">提交答案</button>
+            <div class="quiz-result" id="quiz-result"></div>
+        </div>
+    </div>
+    
+    <div class="modal" id="term-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-term" id="modal-term-content">
+                <!-- 模态框内容将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 公众号： 国土空间规划学习 | 数据来源：《国土空间规划术语》（征求意见稿）行业标准</p>
+    </footer>
+    
+    <script>
+        // 术语数据
+        const termsData = [
+            {
+                id: 1,
+                term: "国土空间",
+                definition: "国家主权与主权权利管辖下的地域空间。",
+                note: "包括陆地国土空间和海洋国土空间。",
+                source: "来源：GB/T 43214—2023",
+                category: "basic"
+            },
+            {
+                id: 2,
+                term: "国土空间规划",
+                definition: "多规合一改革后各类空间规划的总称，以可持续发展为目标，对国土空间开发保护利用建设活动作出总体部署、统筹安排并实施管理的过程。",
+                note: "包括调查分析、规划编制、用途管制、实施监督等阶段。",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 3,
+                term: "国土空间规划体系",
+                definition: "生态文明体制改革的重要成果，由国家、省、市、县、乡镇五级规划和总体规划、详细规划、专项规划三类规划以及规划编制审批体系、实施监督体系、法规政策体系和技术标准体系等组成的国土空间规划各项制度安排的整体。",
+                note: "",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 4,
+                term: "总体规划",
+                definition: "一定时期内，国家和地方行政区范围内国土空间保护、开发、利用、修复的综合部署和行动纲领，是对全国国土空间规划、省级国土空间规划和市、县、乡镇国土空间总体规划的总称。",
+                note: "国土空间总体规划是编制国土空间详细规划、相应层级相关专项规划、近期实施规划以及实施国土空间用途管制的基本依据。",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 5,
+                term: "详细规划",
+                definition: "遵循总体规划，对特定地区内的主导功能、用地用海性质、建设规模、空间使用方式、公共服务设施配置、道路交通和市政基础设施以及空间形态引导控制等作出的具体安排。",
+                note: "包括城镇开发边界内的详细规划、城镇开发边界外的村庄规划以及自然保护地、海洋等区域内的详细规划。按照工作阶段可分为规划单元详细规划、实施单元详细规划。经法定程序批准的详细规划是实施国土空间用途管制和规划许可的法定依据。",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 6,
+                term: "专项规划",
+                definition: "在特定区域（流域）、特定领域，为体现特定功能，统筹和协调专项功能的空间利用而对空间开发保护利用作出的专门安排。",
+                note: "专项规划要遵循相应层级的总体规划，不得违背总体规划强制性内容，其土地和空间使用内容应纳入详细规划和国土空间规划一张图实施监督信息系统。",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 7,
+                term: "永久基本农田",
+                definition: "为保障国家粮食安全和重要农产品供给，按照一定时期人口和经济社会发展对农产品的需求，在国土空间规划中确定的不合理占用或改变用途、实施永久特殊保护的耕地。",
+                note: "包括经国务院农业农村主管部门或者县级以上地方人民政府批准确定的粮、油、糖等重要农产品生产基地内的耕地；有良好的水资源与水土保持条件的耕地和已建成的高标准农田；蔬菜生产基地内的耕地；农业科研、教学试验田内的耕地；黑土层深厚、土壤性状良好的黑土地；法律、行政法规和国务院规定应当划为永久基本农田的其他耕地。",
+                source: "来源：GB/T 43214—2023，有修改",
+                category: "basic"
+            },
+            {
+                id: 8,
+                term: "生态保护红线",
+                definition: "在国土空间规划中统筹划定的，生态功能极重要、生态极脆弱，以及具有潜在重要生态价值，必须强制性严格保护的陆地和海域。",
+                note: "包括整合优化后的各类自然保护地。风景名胜区中属于生态功能极重要、生态极脆弱区域的区域划入生态保护红线。",
+                source: "来源：GB/T 43214—2023，有修改",
+                category: "basic"
+            },
+            {
+                id: 9,
+                term: "城镇开发边界",
+                definition: "在国土空间规划中统筹划定的，一定时期内可以集中进行城镇开发建设，防止城镇蔓延、完善城镇功能、提升空间品质的区域边界。",
+                note: "",
+                source: "来源：GB/T 43214—2023，有修改",
+                category: "basic"
+            },
+            {
+                id: 10,
+                term: "绿地系统线",
+                definition: "在国土空间规划中统筹划定的，具有优化空间格局作用，发挥生态、游憩、景观、防护等功能的各类重要绿地范围的控制线。",
+                note: "",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 11,
+                term: "水体保护线",
+                definition: "在国土空间规划中统筹划定的，保护和控制江、河、湖、库、渠、湿地等地表水体，以及主要含水层、地下水补给区、地下水径流通道、地下水排泄区等地下水体范围的控制线。",
+                note: "",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 12,
+                term: "历史文化保护线",
+                definition: "在国土空间规划中整合、统筹划定的，为整体保护各类历史文化遗产本体及其环境的真实性和完整性，必须进行特别空间管控引导范围的控制线。",
+                note: "包括文物保护单位保护范围和建设控制地带、城市紫线、水下文物保护区、地下文物埋藏区等由国家和地方的法律法规认定公布的各类历史文化遗产保护控制范围边界，以及历史文化保护类专项规划中确定的管控范围边界。",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 13,
+                term: "基础设施建设控制线",
+                definition: "在国土空间规划中统筹划定的，对区域或城市发展全局有影响的基础设施用地、廊道、枢纽建设，需加以预留和控制的地上、地下空间使用范围的控制线。",
+                note: "",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 14,
+                term: "灾害风险控制线",
+                definition: "在国土空间规划中统筹划定的，基于多种情景灾害（如地质灾害、洪涝灾害等）风险评估的结果，根据国土空间安全设防要求需要管控范围的控制线。",
+                note: "",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 15,
+                term: "农用地",
+                definition: "直接用于农牧业生产的土地，包括耕地、园地、林地、草地、农业设施建设用地等。",
+                note: "",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 16,
+                term: "建设用地",
+                definition: "用于建造建筑物、构筑物的土地。",
+                note: "包括城镇村及工矿用地、铁路、公路、机场、港口码头、管道运输、城市轨道交通等交通运输用地，水工设施用地，以及旅游用地、军事设施用地等。",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 17,
+                term: "指标体系",
+                definition: "表达国土空间规划意图、支撑规划实施监督的具体指标的集合。",
+                note: "包括约束性指标、预期性指标和建议性指标等。约束性指标是指为实现规划目标，在规划期内不得突破或必须实现的指标；预期性指标是指按照经济社会发展预期，在规划期内努力实现或不突破的；建议性指标是指可根据地方实际选取的规划指标。",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 18,
+                term: "强制性内容",
+                definition: "在总体规划中确定的，下层级总体规划、同层级相关专项规划和详细规划编制以及规划实施管理中应予严格执行、不得擅自更改的规定内容。",
+                note: "包括耕地和水久基本农田、生态保护红线、城镇开发边界等国土空间安全底线，涉及国防和外交等重大工程项目空间安排，文化遗产与自然遗产保护要求，生态环境、交通、水利、能源、防灾减灾、城乡公共服务等对城乡空间结构有重大影响的设施安排和空间布局等。强制性内容应在总体规划编制成果中准确标明、规范表述并提出相应管理措施。",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 19,
+                term: "国土空间基础信息平台",
+                definition: "自然资源主管部门汇聚基础测绘、遥感、土地使用、地质、矿产资源、地质环境、海洋、不动产等信息资源，集成政府和社会各类国土空间数据，为国土空间治理提供数据支撑和技术服务的统一服务平台，是国土空间规划一张图的数据底座。",
+                note: "",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 20,
+                term: "一张图系统",
+                definition: "国土空间规划一张图实施监督信息系统的前称。基于国土空间基础信息平台构建的覆盖国家、省、市、县四个层级，支撑国土空间规划编制、审批、实施、监督全流程在线管理的应用系统。",
+                note: "",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 21,
+                term: "数字国土",
+                definition: "为提升国土空间治理智能化水平，依托实景三维中国和数字孪生国土建设成果，以国土空间规划实施监测网络等为应用场景，运用相应的数字化算法、模型、工具和技术等，串联国土空间开发保护全链条管理业务所形成的国土空间数据、信息、知识的开放性、共享性的综合性平台。",
+                note: "",
+                source: "",
+                category: "basic"
+            },
+            {
+                id: 22,
+                term: "主体功能区",
+                definition: "根据资源环境承载能力和国土空间开发适宜性、经济社会发展水平、战略定位等，划定的具有某种特定主导功能、实施差别化管控和协调发展的地域空间单元。",
+                note: "建设主体功能区是我国经济发展和生态文明建设的大战略，是构建优势互补的区域经济布局和国土空间体系的基础性制度。主体功能区包括农产品主产区、重点生态功能区、城市化地区三类主体功能区，以及叠加其上的边疆地区、能源资源富集区、历史文化资源富集区、海洋空间重点优化区等特殊功能区。主体功能综合布局是为增强区域综合承载力和竞争力，强化国家重大战略融合协同所构建的功能复合、优势互补的综合性发展单元。主体功能区配套政策主要包括财政、产业、自然资源、生态环境等方面政策以及差别化绩效考核评价机制等。",
+                source: "来源：GB/T 43214—2023，TD/T 1087-2023，有修改",
+                category: "system"
+            },
+            {
+                id: 23,
+                term: "国土空间用途管制",
+                definition: "根据法律法规和技术标准规范，国家编制国土空间规划，对陆地、海洋等所有国土空间的保护开发利用活动，统一实施行政许可、监督管理制度的制定和行为。",
+                note: "作为国家国土空间治理体系的重要组成部分，国土空间用途管制是覆盖全域全要素、贯穿国土空间保护开发利用建设全生命周期的国土空间规划管理制度的总称。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 24,
+                term: "耕地保护",
+                definition: "国家为保证耕地数量不减少、质量不降低、生态有效改善，对耕地实行特殊保护的措施与制度。",
+                note: "十分珍惜、合理利用土地和切实保护耕地是我国的基本国策。耕地保护是国土空间规划和用途管制的重要内容。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 25,
+                term: "规划环境影响评价",
+                definition: "编制有关国土空间开发利用规划的过程中，对规划实施后可能造成的环境影响进行分析、预测和评估，提出预防或者减轻不良环境影响对策措施的方法与制度。",
+                note: "在相关国土空间规划编制成果中应有专门篇章或说明。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 26,
+                term: "生物多样性保护",
+                definition: "对重要生态系统、生物物种和生物遗传资源的多样性及其栖息地、迁徙地实施本底调查、监测评估、预防修复和可持续利用的全面保护行动。",
+                note: "",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 27,
+                term: "城市设计",
+                definition: "对一定地域内自然、社会、经济、文化、历史、工程等多层次、多尺度要素加以综合，运用设计思维和技术方法优化国土空间功能布局、改善生态系统、传承历史文化、彰显风貌特色、塑造高品质公共空间，统筹构建良好空间秩序的过程。",
+                note: "城市设计的运用有助于提高国土空间规划编制和实施水平。城市设计成果中有关控制引导空间形态和提升环境品质的内容，通过法定程序纳入国土空间规划，作为国土空间开发保护利用修复的依据。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 28,
+                term: "自然保护地",
+                definition: "由各级政府依法划定或确认，对重要的自然生态系统、自然遗迹、自然景观及其所承载的自然资源、生态功能和文化价值实施长期保护的陆域或海域。",
+                note: "按照生态价值和保护强度高低依次分为国家公园、自然保护区、自然公园三类，实行分类管理。国家公园和自然保护区实行核心保护区、一般控制区分级管控；自然公园原则上按照一般控制区管理。除风景名胜区（自然公园的一种类型）中不属于生态功能极重要、生态极脆弱的区域外，各类自然保护地应全部纳入生态保护红线管控范围。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 29,
+                term: "国家公园",
+                definition: "以保护具有国家代表性的自然生态系统为主要目的，实现自然资源科学保护和合理利用的法定陆域或海域。",
+                note: "国家公园是我国自然生态系统中最重要、自然景观最独特、自然遗产最精华、生物多样性最富集的部分。国家公园具有保护范围大、生态过程完整，具有全球价值、国家象征、国民认同度高等特征。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 30,
+                term: "自然保护区",
+                definition: "保护典型的自然生态系统、珍稀濒危野生动植物种的天然集中分布区、有特殊意义的自然遗迹的法定区域。",
+                note: "自然保护区具有较大面积、确保主要保护对象安全、维持和恢复珍稀濒危野生动植物种群数量及赖以生存的栖息环境。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 31,
+                term: "自然公园",
+                definition: "保护重要的自然生态系统、自然遗迹和自然景观，具有生态、观赏、文化和科学价值，可持续利用的区域，确保森林、海洋、湿地、水域、冰川、草原、生物等珍贵自然资源，以及所承载的景观、地质地貌和文化多样性得到有效保护。",
+                note: "包括森林、湿地、地质、海洋、沙漠、草原、冰川等各类自然公园和风景名胜区。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 32,
+                term: "风景名胜区",
+                definition: "具有观赏、文化或者科学价值，自然景观、人文景观比较集中，环境优美，可供人们游览或者进行科学、文化活动的法定区域。",
+                note: "",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 33,
+                term: "饮用水水源保护区",
+                definition: "为防止饮用水水源地污染、保证水源水质而划定，并要求加以特殊保护的水域和陆域。",
+                note: "饮用水水源保护区分为一级保护区和二级保护区，必要时可在保护区外划分准保护区。饮用水水源保护区在国土空间规划中应划入生态保护红线。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 34,
+                term: "国土调查",
+                definition: "对国土空间各类自然资源要素和人文资源要素的分布、范围、面积、权属性质等内容及其变动情况开展调查的工作。",
+                note: "土地调查是国家基本调查制度之一，第三次全国国土调查将土地调查更名为国土调查，其中包括十年一次的全面调查和年度变更调查。国土调查的成果是国土空间规划的基础。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 35,
+                term: "用地用海分类",
+                definition: "依据国土空间的主要配置利用方式、经营特点和覆盖特征等因素，按照主要使用方式对土地和海洋使用状况所进行的区分和归类。",
+                note: "多规合一改革后，用地用海分类在城乡、陆海、地上地下空间实现融合统一。用地用海分类适用于国土调查监测、统计、评价、国土空间规划、用途管制和规划许可、耕地保护、生态修复、供应、整治、督察、执法、不动产登记等工作。",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 36,
+                term: "规划机构资质",
+                definition: "根据法律和有关规定，由自然资源主管部门根据规划编制单位的专业技术能力等条件认证的从事国土空间规划编制工作的资格及相应的等级。",
+                note: "",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 37,
+                term: "规划师职业资格",
+                definition: "依据法律和有关规定，专业人员通过由自然资源主管部门会同人力资源主管部门组织的考试，经注册登记后获得的从事国土空间规划编制及相关工作的执业资格。",
+                note: "",
+                source: "",
+                category: "system"
+            },
+            {
+                id: 38,
+                term: "双评价",
+                definition: "资源环境承载能力评价和国土空间开发适宜性评价的简称，是编制国土空间规划、优化国土空间开发保护格局、完善空间治理的基础性工作。其中，资源环境承载能力是指基于特定发展阶段、经济技术水平、生产生活方式和生态保护目标，一定地域范围内资源环境要素能够支撑农业生产、城镇建设等人类活动的最大合理规模。国土空间开发适宜性是指在维系生态系统健康和国土安全的前提下，综合考虑资源环境要素条件，特定国土空间进行农业生产、城镇建设等人类活动的适宜程度。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 39,
+                term: "风险评估",
+                definition: "按照风险识别、风险分析和风险评价的步骤，对生态保护、资源利用、自然灾害、国土安全等方面的风险事件发生的可能性、影响范围与损失程度等进行分析，对其危险性进行定性或量化处理，确定其发生概率和危险程度的工作过程。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 40,
+                term: "人口规模",
+                definition: "一定地域内常住人口的数量。通常分为现状人口规模和规划人口规模。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 41,
+                term: "规划分区",
+                definition: "市县国土空间规划中传导主体功能定位、在全球范围内划定的功能地域单元，按照分区边界和管控规则实施空间准入和用途管制。",
+                note: "通常分为一级规划分区和二级规划分区；一级规划分区包括生态保护区、生态控制区、农田保护区、城镇发展区、乡村发展区、海洋发展区等。",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 42,
+                term: "区域协同",
+                definition: "为贯彻落实重大区域战略、协调解决跨行政区重大问题等，通过发挥区域比较优势、促进资源要素跨行政区优化配置和高效利用，实现生态环境共保共治、基础设施互联互通、公共服务共建共享、产业创新助力协同的政策过程。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 43,
+                term: "城乡融合",
+                definition: "将城市和乡村作为有机整体，整体谋划城乡产业发展、基础设施、公共服务、自然生态和历史文化保护等内容，统筹优化城乡空间结构和功能布局，全面提高城乡规划、建设、治理融合水平，促进城乡要素自由流动、平等交换和公共资源合理配置，形成工农互促、城乡互补、全面融合、共同繁荣新型工农城乡关系的政策方向及其过程。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 44,
+                term: "陆海统筹",
+                definition: "在科学把握陆海生态系统完整性和陆海开发利用关联性规律的基础上，统一谋划沿海海域和海洋空间的资源利用、经济发展、环境保护和生态安全等，对陆域和海洋国土空间保护、开发和利用活动进行全方位统筹安排的规划理念和过程。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 45,
+                term: "地上地下空间统筹",
+                definition: "在国土空间规划、城乡建设和运维等过程中，统筹地上和地下空间的开发、保护与利用，确保地下和地上资源的安全利用、合理配置和空间协调，提高土地集约化程度，优化国土空间利用效率，增强城市安全韧性的规划理念和过程。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 46,
+                term: "国土空间开发保护格局",
+                definition: "国家或地区范围内空间发展的布局和结构，是国土空间保护、开发、利用、修复、整治活动在空间上的相互关系及其总体安排的组织结构。",
+                note: "国土空间开发保护格局应体现国家的发展目标、战略和方式，是实现经济社会发展的基本载体。",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 47,
+                term: "重点生态功能区",
+                definition: "保障国家和区域生态安全、维护生态系统服务功能、推进山水林田湖草系统治理、保持并提高生态产品供给能力的地域空间，是引领生态文明建设、践行绿水青山就是金山银山理念的主要区域。",
+                note: "",
+                source: "来源：TD/T 1087-2023，有修改",
+                category: "master"
+            },
+            {
+                id: 48,
+                term: "生态安全屏障",
+                definition: "能够保护内部生态系统结构、过程和功能不受或少受外部环境破坏或威胁，有助于保障较大尺度生态系统完整性、稳定性和可持续性的特定区域。",
+                note: "是维护国家生态安全的重要保障。",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 49,
+                term: "生态系统服务",
+                definition: "人类从生态系统获得的所有利益，通常包括供给服务、调节服务、文化服务以及支持服务，如水源涵养、水土保持、防风固沙、生物多样性等。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 50,
+                term: "生态网络",
+                definition: "在一定地域范围，为保护生物多样性和景观完整性，由生态斑块、生态廊道和生态基质构成的相互连接和相互作用具有典型生态意义的网络系统。",
+                note: "具有全局性、多样性、连续性、可持续性等特征。",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 51,
+                term: "生态廊道",
+                definition: "为提高生态系统连通性，连接相互隔离的生态斑块以促进生物扩散，以及生态系统物质、能量、信息交流的线性生态空间。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 52,
+                term: "农产品主产区",
+                definition: "农用地面积较多，农业发展条件较好，保障国家粮食和重要农产品供给的区域。",
+                note: "",
+                source: "来源：TD/T 1087-2023，有修改",
+                category: "master"
+            },
+            {
+                id: 53,
+                term: "高标准农田",
+                definition: "田块平整、集中连片、设施完善、节水高效、农电配套、宜机作业、土壤肥沃、生态友好、抗灾能力强，与现代农业生产和经营方式相适应的旱涝保收、稳产高产的耕地。",
+                note: "",
+                source: "来源：GB/T 30600-2022",
+                category: "master"
+            },
+            {
+                id: 54,
+                term: "都市农业区",
+                definition: "城市或城市周边划定用于开展农业生产活动，同时提供食物安全保障、休闲、教育和生态服务功能的特定区域。",
+                note: "旨在保护农业用地，促进生态环境的维护，增强社区参与，并推动农业产业与城市的和谐共生。",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 55,
+                term: "设施农业",
+                definition: "利用现代信息技术、生物技术、工程装备技术与现代经营管理方式，为动植物生长提供相对可控制的环境条件，在一定程度上摆脱自然依赖进行高效生产的农业类型，涵盖设施种植、设施畜牧、设施渔业和提供支撑服务的公共设施等。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 56,
+                term: "城市化地区",
+                definition: "人口、产业集聚能力较强，以落实国家及区域发展战略、推动高质量发展的主要动力源、区域协调发展的重要支撑点、提升国家和区域综合能力为主要功能的地域空间。",
+                note: "",
+                source: "来源：TD/T 1087-2023",
+                category: "master"
+            },
+            {
+                id: 57,
+                term: "城镇体系",
+                definition: "在一个相对完整的区域内，以中心城市为核心，由不同职能分工和不同规模等级的城镇组成的集合。",
+                note: "",
+                source: "来源：GB/T 50280-98，有修改",
+                category: "master"
+            },
+            {
+                id: 58,
+                term: "城市群",
+                definition: "在特定地域内，以一个或多个特大、超大城市为核心，依托现代化的交通运输和信息网络，与周边大中小城市和小城镇形成的内在功能紧密联系，具有较高网络联通度的城镇集合体。",
+                note: "",
+                source: "来源：GB/T 43214—2023",
+                category: "master"
+            },
+            {
+                id: 59,
+                term: "都市圈",
+                definition: "以辐射带动功能强的城市为核心，以一小时交通通勤圈为基本范围，与周边城镇经济活动联系紧密，通勤便捷高效、公共服务便利共享的同城化地域。",
+                note: "",
+                source: "来源：GB/T 43214—2023",
+                category: "master"
+            },
+            {
+                id: 60,
+                term: "城区范围",
+                definition: "一定时期内划分城乡空间的城镇化标准统计区范围。一般在市辖区、不设区的市政建制镇行政辖区内，实际已开发建设，市政公用设施和公共服务设施基本覆盖的居（村）民委员会辖区。",
+                note: "包括城区范围和镇区范围。城/镇区范围的确定，可以为城乡统计工作提供统一、标准化的城市用地、城镇人口等的统计范围，并为编制市县国土空间规划、开展城市体检评估、动态监测及规划实施监督工作提供重要支撑。",
+                source: "来源：TD/T 1064-2021，有修改",
+                category: "master"
+            },
+            {
+                id: 61,
+                term: "城市空间结构",
+                definition: "城市各类构成要素，在一定时间形成的相互关联、相互影响与相互制约的空间关系，是社会经济结构在土地和空间使用上的反映。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 62,
+                term: "城镇建设用地结构",
+                definition: "各类城镇建设单项用地的空间分布和数量配置之间的相互关系。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 63,
+                term: "社区生活圈",
+                definition: "在适宜的步行范围内，满足城乡居民工作与生活等各类日常需求的基本单元。",
+                note: "",
+                source: "来源：TD/T 1062-2021，有修改",
+                category: "master"
+            },
+            {
+                id: 64,
+                term: "城镇开发强度分区",
+                definition: "在城镇开发边界内，依据不同开发建设容量划分成不同地区，对空间形态进行差异化管理。",
+                note: "也称密度分区。是国土空间用途管制的一项内容。",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 65,
+                term: "城市蓝绿空间网络",
+                definition: "城区范围内，各类绿地、湿地、水域以及部分农田等构成的开放空间系统。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 66,
+                term: "战略留白区",
+                definition: "为应对未来发展的不确定性、保障城镇重大战略性功能和重大设施需要等未来国土空间资源配置的需要，在城镇集中建设区内预留控制的空间地域和相应用地指标。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 67,
+                term: "陆海分界线",
+                definition: "多年大潮平均高潮位时的海陆分界的痕迹线。",
+                note: "即海岸线。",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 68,
+                term: "自然岸线",
+                definition: "由海陆相互作用形成的原生岸线，保持自然海岸特征，未受到人类活动改变自然形态与空间特征的海岸线，以及经整治修复后具有自然海岸形态特征和生态功能的海岸线。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 69,
+                term: "海洋生态空间",
+                definition: "具有自然属性、以提供海洋生态服务或生态产品为主的功能空间。",
+                note: "包括海洋生态红线集中划定的区域，以及需要予以保留原貌、强化生态保育和生态建设、限制开发建设的海洋自然区域。",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 70,
+                term: "海洋开发利用空间",
+                definition: "以承载海洋开发利用活动为主的功能空间。",
+                note: "包括允许集中开展开发利用活动的海域和允许适度开展开发利用活动的无居民海岛。",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 71,
+                term: "海岸建筑退缩线",
+                definition: "由陆海分界线向陆一侧划定的限制永久性建筑物的控制界线。",
+                note: "",
+                source: "",
+                category: "master"
+            },
+            {
+                id: 72,
+                term: "控制性详细规划",
+                definition: "以总体规划为依据，对特定地区内的用地进行地块划分，确定建设地区的土地使用性质和使用强度的控制指标。公共服务设施配置、道路和工程管线控制位置以及空间环境控制规划要求的成果。",
+                note: "",
+                source: "来源：GB/T 50280-98，有修改",
+                category: "detail"
+            },
+            {
+                id: 73,
+                term: "图则",
+                definition: "在规划图上标示相关控制和引导规定的法定文件。",
+                note: "详细规划的成果形式之一。",
+                source: "",
+                category: "detail"
+            },
+            {
+                id: 74,
+                term: "公共空间",
+                definition: "在城镇和村落中，向社会开放、公众可以自由进入使用的空间区域和场所，具有不排除任何人的共享属性。",
+                note: "",
+                source: "",
+                category: "detail"
+            },
+            {
+                id: 75,
+                term: "开敞空间",
+                definition: "城市中非建筑实体占用或建筑实体较少，城市绿色与自然空间组织的一种空间形式。",
+                note: "包括公园绿地、道路广场、河湖水系、空地以及部分农地等空间。",
+                source: "",
+                category: "detail"
+            },
+            {
+                id: 76,
+                term: "竖向设计",
+                definition: "城市开发建设地区（或地段）为满足道路交通、地面排水、建筑布置和城市景观等方面的综合要求，对自然地形进行利用、改造，确定坡度、控制高程和平衡土方等而进行的规划设计。",
+                note: "",
+                source: "来源：GB/T 50280-98，有修改",
+                category: "detail"
+            },
+            {
+                id: 77,
+                term: "城市管线综合规划",
+                definition: "统筹安排城市建设地区各类工程管线的空间位置，综合协调工程管线之间以及工程管线与其他相关工程设施之间的关系而进行的规划设计。",
+                note: "",
+                source: "来源：GB/T 50280-98，有修改",
+                category: "detail"
+            },
+            {
+                id: 78,
+                term: "容积率",
+                definition: "一定地块内，建筑总面积与用地面积的比值，是衡量土地开发速度的主要指标。",
+                note: "",
+                source: "来源：GB/T 50280-98，有修改",
+                category: "detail"
+            },
+            {
+                id: 79,
+                term: "绿地率",
+                definition: "城市一定地区内各类绿化用地总面积占该地区总面积的比例。",
+                note: "",
+                source: "来源：GB/T 50280-98",
+                category: "detail"
+            },
+            {
+                id: 80,
+                term: "建筑密度",
+                definition: "一定地块内所有建筑物的基底总面积占总用地面积的比例。",
+                note: "",
+                source: "来源：GB/T 50280-98",
+                category: "detail"
+            },
+            {
+                id: 81,
+                term: "建筑限高",
+                definition: "规划确定的一定地区或地块内建筑物建设所允许的建筑高度最大值。",
+                note: "",
+                source: "",
+                category: "detail"
+            },
+            {
+                id: 82,
+                term: "建筑控制线",
+                definition: "地块内建筑物、构筑物用地布置不得突破的控制界线。",
+                note: "",
+                source: "",
+                category: "detail"
+            },
+            {
+                id: 83,
+                term: "村庄规划",
+                definition: "国土空间规划体系中城镇开发边界外的详细规划，是乡村地区开展国土空间开发保护活动、实施国土空间用途管制、核发乡村建设项目规划许可、进行各项建设等的法定依据。",
+                note: "",
+                source: "",
+                category: "detail"
+            },
+            {
+                id: 84,
+                term: "村庄建设边界",
+                definition: "基于国土现状调查结果，为满足一定时期内乡村发展需要而划定的用于村庄集中开发建设的区域边界。",
+                note: "",
+                source: "",
+                category: "detail"
+            },
+            {
+                id: 85,
+                term: "集体建设用地",
+                definition: "农村集体经济组织和农民个人在集体所有的土地上建设非农业设施的用地。",
+                note: "",
+                source: "",
+                category: "detail"
+            },
+            {
+                id: 86,
+                term: "宅基地",
+                definition: "农户或个人建造自用住宅及其附属设施的集体建设用地。",
+                note: "",
+                source: "来源：参考GB/T 19231-2003的6.5.2.3.1修改",
+                category: "detail"
+            },
+            {
+                id: 87,
+                term: "乡村空间设计",
+                definition: "运用设计思维和空间形态组织、环境营造方法，结合自然山水格局、地形地貌景观、历史人文传承、居民生产生活习惯等，从不同尺度对乡村地区的农业生产、居民生活的空间秩序和田园景观、特色风貌等进行的整体安排和控制引导。",
+                note: "",
+                source: "",
+                category: "detail"
+            },
+            {
+                id: 88,
+                term: "流域国土空间规划",
+                definition: "以流域为单元编制的国土空间规划，通过统筹上下游、左右岸及跨行政区的空间功能，提出优化生产、生活、生态空间的具体举措，协调解决矛盾冲突，推动集约高效发展，实现流域一体化高质量发展。",
+                note: "",
+                source: "",
+                category: "special"
+            },
+            {
+                id: 89,
+                term: "综合交通规划",
+                definition: "为支撑国土空间开发格局优化，对一定区域范围内各种交通方式及其设施规模和布局等，在空间和时序上作出的总体部署和统筹安排。",
+                note: "",
+                source: "",
+                category: "special"
+            },
+            {
+                id: 90,
+                term: "市政公用设施规划",
+                definition: "对供水、排水、供电、燃气、通信、供热、园林、环境卫生等市政公用设施所编制的专项规划的统称。",
+                note: "",
+                source: "",
+                category: "special"
+            },
+            {
+                id: 91,
+                term: "公共服务设施规划",
+                definition: "对教育、文化、体育、医疗卫生、社会福利等公共服务设施所编制的专项规划的统称。",
+                note: "",
+                source: "",
+                category: "special"
+            },
+            {
+                id: 92,
+                term: "综合防灾规划",
+                definition: "为应对和减轻主要自然灾害和人为灾害，在灾害风险评估的基础上，统筹利用改造各类资源，总体部署完善应急保障系统和应急服务系统的专项规划。",
+                note: "",
+                source: "",
+                category: "special"
+            },
+            {
+                id: 93,
+                term: "绿地系统规划",
+                definition: "为形成具有合理结构的绿色空间系统，实现绿地所具有的生态保护、游憩休闲和社会文化等功能为目标，对各类绿地进行总体部署和具体安排的专项规划。",
+                note: "",
+                source: "",
+                category: "special"
+            },
+            {
+                id: 94,
+                term: "地下空间规划",
+                definition: "一定时期内地下空间资源保护、利用的综合部署、具体安排和实施管理。",
+                note: "以地质调查、地下空间资源评估等工作为基础，统筹协调各类建筑地下空间利用、交通及枢纽、基础设施、人防工程、防灾减灾、文物保护、能源矿产储运、地热及地下水资源保护利用等各类空间需求，明确地下空间分层分区和协调的管控引导要求。",
+                source: "",
+                category: "special"
+            },
+            {
+                id: 95,
+                term: "规划许可",
+                definition: "自然资源主管部门根据行政相对人的申请，依据法律和批准的国土空间详细规划及规划管理规定，对建设项目的土地使用性质、开发强度、空间使用方式、配套设施、风貌景观等内容进行审查，并通过颁发规划许可证的形式，准予其行使土地使用权进行建设活动的行政行为。",
+                note: "包括建设用地规划许可证、建设工程规划许可证和乡村建设规划许可证。",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 96,
+                term: "规划条件",
+                definition: "自然资源主管部门依据法律法规、详细规划及相关规划管理技术规定，对具体用地用途以及建设工程的使用性质、开发强度、空间使用方式、配套设施、风貌景观等提出的规定性和指导性要求。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 97,
+                term: "建设项目用地预审与选址意见书",
+                definition: "在建设项目审批、核准前或备案前后，自然资源主管部门依法核发的有关建设项目用地审查、确定建设用地位置和规划条件的行政许可法律凭证。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 98,
+                term: "建设项目用海预审",
+                definition: "在涉海建设项目审批、核准前，自然资源主管部门依法核发的有关海域使用位置和布局的行政许可法律凭证。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 99,
+                term: "海域使用论证报告",
+                definition: "涉海建设项目申请人向自然资源主管部门申请使用海域时必须提交的书面材料之一，内容包括用海必要性分析、资源生态影响分析、海域开发利用协调分析、国土空间规划符合性分析、项目用海合理性分析、生态用海对策分析等。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 100,
+                term: "建设用地规划许可证",
+                definition: "自然资源主管部门依法核发的有关建设用地项目符合国土空间规划要求、批准使用建设用地的行政许可法律凭证。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 101,
+                term: "建设工程规划许可证",
+                definition: "自然资源主管部门依法对拟建（包括改、扩建）建筑物、构筑物、道路等交通设施、管线和其他工程核发的有关建设工程符合国土空间规划要求的行政许可法律凭证。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 102,
+                term: "乡村建设规划许可证",
+                definition: "自然资源主管部门依法对乡镇企业、乡村公共设施和公益事业建设以及农村村民住宅建设等核发的使用集体土地的建设工程符合国土空间规划要求的行政许可法律凭证。经省、自治区、直辖市人民政府依法确定的乡、镇人民政府可对村民使用宅基地进行村民住宅建设进行规划审查，颁发乡村建设规划许可证。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 103,
+                term: "建设项目规划核实",
+                definition: "自然资源主管部门依法对建设项目是否符合国土空间规划和规划条件以及建设用地许可、建设工程规划许可或乡村规划建设许可内容等进行核查、核验的行政行为。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 104,
+                term: "土地使用权出让",
+                definition: "土地所有者将土地使用权在一定年限内与土地使用者，由土地使用者按照出让合同载明的土地用途、规划条件等约定使用土地，并支付土地使用权出让金的行为和制度。",
+                note: "土地使用权出让适用于城镇国有土地以及经国土空间规划确定为工业、商业等用途的集体经营性建设用地。",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 105,
+                term: "土地使用权转让",
+                definition: "土地使用者以出售、交换、赠与的方式将土地使用权转移给他人的行为。",
+                note: "土地使用权转让时，土地使用权出让合同和登记文件中所载明的土地用途、规划条件等权利、义务随之转移。",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 106,
+                term: "土地利用计划",
+                definition: "根据国土空间规划、国民经济和社会发展规划、国家产业政策和土地利用状况，对年度建设用地进行统筹安排的一项政策工具。",
+                note: "主要内容包括年度新增建设用地总量、新增建设占用农用地、新增建设占用耕地等。",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 107,
+                term: "集体土地使用权流转",
+                definition: "在不改变农村土地所有权性质的基础上，土地使用权人或组织依法将土地经营权转移给他人的行为。",
+                note: "包括两种情形：一是拥有土地承包经营权的农户依法采取出租（转包）、入股或者其他方式向他人流转土地经营权；二是经依法登记取得权属证书的个人或经济组织，采取出租、入股、抵押或者其他方式流转土地经营权。",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 108,
+                term: "农用地转用",
+                definition: "依据法律法规和国土空间规划，将农用地转变为非农建设用地的行为。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 109,
+                term: "耕地占补平衡",
+                definition: "在严格执行国土空间规划和土地利用计划管控要求下，国家对非农建设、造林种树、种果种茶等各类占用耕地行为，实施省级行政区域耕地总量动态平衡、质量稳定监督管理的制度。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 110,
+                term: "城乡建设用地增减挂钩",
+                definition: "依据国土空间规划，对农村地区废弃、闲置、低效的存量建设用地进行整理复垦，腾出建设用地指标优先满足乡村发展建设需要，节余部分用于城镇发展、矿产资源开发和基础设施建设，从而推动实现城乡用地布局更合理、节约集约利用水平有提高、耕地数量质量不降低、生态环境有改善的管理制度。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 111,
+                term: "增存挂钩",
+                definition: "新增建设用地计划安排与存量土地盘活相挂钩，并根据存量土地处置任务完成情况奖励或扣减计划指标的制度。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 112,
+                term: "土地征收",
+                definition: "国家为了公共利益需要，依法将集体所有的土地转为国家所有，并给予公平、合理补偿的行为。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 113,
+                term: "土地收储",
+                definition: "县级及以上人民政府或其授权的土地储备机构，通过收购、回购、置换和征收等方式取得土地，组织前期开发、存储以备供应的行为。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 114,
+                term: "成片开发",
+                definition: "在国土空间规划确定的城镇建设用地范围内，经省级以上人民政府批准由县级以上地方人民政府组织对一定范围的农民集体所有的土地依法实施征收的行为。",
+                note: "",
+                source: "",
+                category: "implement"
+            },
+            {
+                id: 115,
+                term: "不动产登记",
+                definition: "依照权益人的申请，不动产登记机构依法将土地、海域以及房屋、林木等定着物的权利归属和其他法定事项记载于不动产登记簿的行为。",
+                note: "不动产登记信息是国土调查的组成部分，是国土空间规划编制和实施管理的重要基础。不符合国土空间规划明确的功能或建设工程规划许可确定的用途，不得办理不动产登记。",
+                source: "来源：TD/T 1095-2024，有修改",
+                category: "implement"
+            },
+            {
+                id: 116,
+                term: "规划实施监测评估预警",
+                definition: "围绕国土空间运行状况、国土空间规划传导衔接、国土空间规划实施管理等方面情况，通过对重要控制线、重大战略区域、重点城市等规划实施情况和重大工程、重点领域、突出问题等的监测，开展一致性、适应性与规划实施绩效等方面的监测评估，对触发预警条件的情况及时预警反馈，支撑规划管理和国土空间治理动态优化。",
+                note: "",
+                source: "",
+                category: "supervision"
+            },
+            {
+                id: 117,
+                term: "规划实施体检评估",
+                definition: "是国土空间规划实施管理的重要制度。按照定期体检和五年一评估要求，对国土空间发展阶段特征和各级各类国土空间规划实施情况及其效果定期进行分析和评估，及时发现国土空间规划实施过程的问题和不足，提出对策建议，支撑国土空间规划动态调整完善和规划编制修改等。",
+                note: "",
+                source: "",
+                category: "supervision"
+            },
+            {
+                id: 118,
+                term: "国土空间规划执法",
+                definition: "县级以上自然资源主管部门依照法定职权和程序，对公民、法人和其他组织违反相关法律法规和国土空间规划的行为进行检查、制止和查处的行政执法活动。",
+                note: "",
+                source: "",
+                category: "supervision"
+            }
+        ];
+
+        // 分类名称映射
+        const categoryNames = {
+            "basic": "基础术语",
+            "system": "基本制度",
+            "master": "总体规划",
+            "detail": "详细规划",
+            "special": "专项规划",
+            "implement": "实施管理",
+            "supervision": "实施监督"
+        };
+
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTerms(termsData);
+            setupEventListeners();
+        });
+
+        // 渲染术语卡片
+        function renderTerms(terms) {
+            const container = document.getElementById('terms-container');
+            container.innerHTML = '';
+            
+            terms.forEach((term, index) => {
+                const card = document.createElement('div');
+                card.className = 'term-card';
+                card.dataset.id = term.id;
+                
+                let html = `
+                    <h3>${term.term}</h3>
+                    <p>${term.definition}</p>
+                `;
+                
+                if (term.note) {
+                    html += `<div class="note">${term.note}</div>`;
+                }
+                
+                if (term.source) {
+                    html += `<div class="source">${term.source}</div>`;
+                }
+                
+                html += `<div class="category-tag">${categoryNames[term.category]}</div>`;
+                
+                card.innerHTML = html;
+                container.appendChild(card);
+                
+                // 添加点击事件
+                card.addEventListener('click', () => openTermModal(term));
+            });
+        }
+
+        // 打开术语模态框
+        function openTermModal(term) {
+            const modal = document.getElementById('term-modal');
+            const content = document.getElementById('modal-term-content');
+            
+            let html = `
+                <h2>${term.term}</h2>
+                <p><strong>定义：</strong>${term.definition}</p>
+            `;
+            
+            if (term.note) {
+                html += `<div class="note"><strong>注：</strong>${term.note}</div>`;
+            }
+            
+            if (term.source) {
+                html += `<div class="source">${term.source}</div>`;
+            }
+            
+            content.innerHTML = html;
+            modal.style.display = 'block';
+            
+            // 添加关闭事件
+            document.querySelector('.close-btn').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            // 点击模态框外部关闭
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 搜索功能
+            document.getElementById('search-input').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredTerms = termsData.filter(term => 
+                    term.term.toLowerCase().includes(searchTerm) || 
+                    term.definition.toLowerCase().includes(searchTerm) ||
+                    (term.note && term.note.toLowerCase().includes(searchTerm))
+                );
+                renderTerms(filteredTerms);
+            });
+            
+            // 分类筛选
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const category = this.dataset.category;
+                    if (category === 'all') {
+                        renderTerms(termsData);
+                    } else {
+                        const filteredTerms = termsData.filter(term => term.category === category);
+                        renderTerms(filteredTerms);
+                    }
+                });
+            });
+            
+            // 测验功能
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const question = this.parentElement.parentElement;
+                    question.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            // 提交测验
+            document.getElementById('submit-quiz').addEventListener('click', function() {
+                const questions = document.querySelectorAll('.quiz-question');
+                let correctAnswers = 0;
+                
+                // 第一题正确答案是A
+                const q1Selected = questions[0].querySelector('.selected');
+                if (q1Selected && q1Selected.textContent.startsWith('A')) {
+                    correctAnswers++;
+                    q1Selected.classList.add('correct');
+                } else if (q1Selected) {
+                    q1Selected.classList.add('incorrect');
+                    questions[0].querySelector('.quiz-option:nth-child(1)').classList.add('correct');
+                }
+                
+                // 第二题正确答案是B
+                const q2Selected = questions[1].querySelector('.selected');
+                if (q2Selected && q2Selected.textContent.startsWith('B')) {
+                    correctAnswers++;
+                    q2Selected.classList.add('correct');
+                } else if (q2Selected) {
+                    q2Selected.classList.add('incorrect');
+                    questions[1].querySelector('.quiz-option:nth-child(2)').classList.add('correct');
+                }
+                
+                // 第三题正确答案是D
+                const q3Selected = questions[2].querySelector('.selected');
+                if (q3Selected && q3Selected.textContent.startsWith('D')) {
+                    correctAnswers++;
+                    q3Selected.classList.add('correct');
+                } else if (q3Selected) {
+                    q3Selected.classList.add('incorrect');
+                    questions[2].querySelector('.quiz-option:nth-child(4)').classList.add('correct');
+                }
+                
+                // 显示结果
+                const result = document.getElementById('quiz-result');
+                result.textContent = `测验结果：${correctAnswers} / 3 正确`;
+                result.style.display = 'block';
+                
+                // 禁用提交按钮
+                this.disabled = true;
+            });
+        }
+    </script>
+</body>
+</html>
